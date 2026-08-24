@@ -8,11 +8,11 @@ import glob
 class LogGenerator:
     def __init__(self, root):
         """
-        初始化日志生成器应用程序
+        初始化JSON编辑器应用程序
         :param root: Tkinter根窗口
         """
         self.root = root
-        self.root.title("日志生成器 - Lictober7th")  # 设置窗口标题
+        self.root.title("JSON编辑器 - Lictober7th")  # 设置窗口标题
         self.root.geometry("850x720")  # 设置窗口大小
         self.root.resizable(True, True)  # 允许窗口调整大小
         
@@ -39,7 +39,7 @@ class LogGenerator:
         main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))  # 将主框架放置在网格中，使其可以拉伸
         
         # 标题
-        title_label = ttk.Label(main_frame, text="日志生成器", font=("Arial", 16, "bold"))  # 创建标题标签
+        title_label = ttk.Label(main_frame, text="JSON编辑器", font=("Arial", 16, "bold"))  # 创建标题标签
         title_label.grid(row=0, column=0, columnspan=2, pady=(0, 10))  # 放置标题标签，跨两列
         
         subtitle_label = ttk.Label(main_frame, text="Lictober7th://LOG", font=("Arial", 10))  # 创建副标题标签
@@ -292,8 +292,8 @@ class LogGenerator:
             self.current_post_index = -1
             messagebox.showinfo("成功", "帖子已更新！")
         else:
-            # 添加新帖子
-            self.posts.append(post_data)
+            # 添加新帖子到开头
+            self.posts.insert(0, post_data)  # 使用insert(0, ...)在开头插入
             messagebox.showinfo("成功", "帖子已添加！")
         
         self.update_post_list()

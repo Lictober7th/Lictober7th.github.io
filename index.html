@@ -437,7 +437,6 @@
     #pages {
       position: fixed;
       inset: 0;
-      transition: transform 1s cubic-bezier(.77, 0, .18, 1);
     }
 
     .page {
@@ -504,21 +503,29 @@
       background: var(--cyan);
     }
 
-    /*每屏定位：靠 transform 堆叠*/
+    /*每屏定位：重叠堆叠，索引小的在上层，滑开时横向移出*/
+    .page {
+      transition: transform 1s cubic-bezier(.77, 0, .18, 1);
+    }
+
     .page[data-i="0"] {
-      transform: translateX(0);
+      z-index: 4;
     }
 
     .page[data-i="1"] {
-      transform: translateX(100vw);
+      z-index: 3;
     }
 
     .page[data-i="2"] {
-      transform: translateX(200vw);
+      z-index: 2;
     }
 
     .page[data-i="3"] {
-      transform: translateX(300vw);
+      z-index: 1;
+    }
+
+    .page.left {
+      transform: translateX(-100vw);
     }
 
     /*首页*/
@@ -593,7 +600,7 @@
         opacity: 1;
       }
 
-      /* ====== 第一次闪烁（轻柔版） ====== */
+      /* = 第一次闪烁（轻柔版） = */
       73% {
         text-shadow:
           0 0 15px rgba(0, 255, 255, 0.4),
@@ -630,7 +637,7 @@
         opacity: 1;
       }
 
-      /* ====== 色彩分离（小幅度：从 3px → 1.5px） ====== */
+      /* = 色彩分离（小幅度：从 3px → 1.5px） = */
       80% {
         text-shadow:
           -1.5px 0 rgba(255, 0, 255, 0.5),
@@ -653,7 +660,7 @@
         color: #fff;
       }
 
-      /* ====== 短暂微暗（代替黑屏） ====== */
+      /* = 短暂微暗（代替黑屏） = */
       86% {
         text-shadow: none;
         color: #222;
@@ -668,7 +675,7 @@
         opacity: 1;
       }
 
-      /* ====== 第二次闪烁（轻柔版） ====== */
+      /* = 第二次闪烁（轻柔版） = */
       90% {
         text-shadow:
           0 0 20px rgba(0, 255, 255, 0.5),
@@ -699,7 +706,7 @@
         color: #fff;
       }
 
-      /* ====== 横向撕裂（小幅度：从 4px → 1.5px） ====== */
+      /* = 横向撕裂（小幅度：从 4px → 1.5px） = */
       95% {
         text-shadow:
           -1.5px 1px rgba(255, 0, 255, 0.4),
@@ -719,7 +726,7 @@
           1px -1.5px rgba(0, 255, 255, 0.3);
       }
 
-      /* ====== 恢复常态 ====== */
+      /* = 恢复常态 = */
       98%,
       100% {
         text-shadow:
@@ -2049,10 +2056,10 @@
       <span class="word"><b>Lictober7th<em>://</em>LOG</b><span>Personal Blog</span></span>
     </a>
     <nav class="menu" id="menu">
-      <a href="javascript:void(0)" data-goto="0" class="active"><span class="idx">00</span>首页</a>
-      <a href="javascript:void(0)" data-goto="1"><span class="idx">01</span>文章</a>
-      <a href="javascript:void(0)" data-goto="2"><span class="idx">02</span>关于</a>
-      <a href="javascript:void(0)" data-goto="3"><span class="idx">03</span>链接</a>
+      <a href="javascript:void(0)" data-goto="0" class="active"><span class="idx">01</span>首页</a>
+      <a href="javascript:void(0)" data-goto="1"><span class="idx">02</span>文章</a>
+      <a href="javascript:void(0)" data-goto="2"><span class="idx">03</span>关于</a>
+      <a href="javascript:void(0)" data-goto="3"><span class="idx">04</span>链接</a>
     </nav>
     <div class="nav-right">
       <button class="icon-btn" id="themeBtn" title="切换亮暗主题" aria-label="切换主题">
@@ -2248,12 +2255,12 @@
   </div>
 
   <script>
-    /*================= 全局状态 =================*/
+    /* 全局状态 */
     var current = 0;
     var total = 4;
     var animating = false;
 
-    /*================= LOADING =================*/
+    /* LOADING */
     (function () {
       var pct = document.querySelector('#loader .pct');
       var n = 0;
@@ -2264,7 +2271,7 @@
       }, 110);
     })();
 
-    /*================= 主题切换 =================*/
+    /* 主题切换 */
     (function () {
       var btn = document.getElementById('themeBtn');
       var moon = btn.querySelector('.icon-moon');
@@ -2284,48 +2291,69 @@
       });
     })();
 
-    /*================= 背景音乐 =================*/
+    /* 背景音乐 */
     (function () {
       var audio = new Audio('Music/backgroundMusic.MP3');
       audio.loop = true;
       audio.volume = 0.5;
+
       var btn = document.getElementById('musicBtn');
+      if (!btn) return;
       var on = btn.querySelector('.icon-music');
       var off = btn.querySelector('.icon-music-off');
-      var playing = true;
+      var playing = false;
+
       function setState(p) {
         playing = p;
-        on.style.display = p ? 'none' : '';
-        off.style.display = p ? '' : 'none';
+        if (on) on.style.display = p ? 'none' : '';
+        if (off) off.style.display = p ? '' : 'none';
       }
+
       function play() {
         var pr = audio.play();
-        if (pr && pr.then) { pr.then(function () { setState(true); }).catch(function () { setState(false); }); }
-        else { setState(true); }
+        if (pr && typeof pr.then === 'function') {
+          pr.then(function () {
+            setState(true);
+          }).catch(function () {
+            setState(false);
+          });
+        } else {
+          setState(true);
+        }
       }
-      setState(true); // 默认显示「播放中」状态
-      // 自动播放尝试（可能被浏览器拦截）
+
+      setState(false);
       play();
-      // 首次交互兜底
-      function resumeOnce() {
+
+      // 创建隐藏遮罩
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;opacity:0;pointer-events:auto;';
+      document.body.appendChild(overlay);
+
+      var hasInteracted = false;
+      function onFirstInteraction() {
+        if (hasInteracted) return;
+        hasInteracted = true;
         if (!playing) { play(); }
-        window.removeEventListener('click', resumeOnce);
-        window.removeEventListener('keydown', resumeOnce);
-        window.removeEventListener('touchstart', resumeOnce);
+        overlay.remove();
+        window.removeEventListener('keydown', onFirstInteraction);
+        window.removeEventListener('wheel', onFirstInteraction);
       }
-      window.addEventListener('click', resumeOnce);
-      window.addEventListener('keydown', resumeOnce);
-      window.addEventListener('touchstart', resumeOnce);
+      overlay.addEventListener('click', onFirstInteraction);
+      window.addEventListener('keydown', onFirstInteraction);
+      window.addEventListener('wheel', onFirstInteraction);
+
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         if (playing) { audio.pause(); setState(false); }
         else { play(); }
       });
+
       audio.addEventListener('play', function () { setState(true); });
       audio.addEventListener('pause', function () { setState(false); });
     })();
 
-    /*================= 整屏滚动 =================*/
+    /* 整屏滚动 */
     var pages = document.getElementById('pages');
     var dots = document.querySelectorAll('#dots .dot');
     var pageind = document.getElementById('curPage');
@@ -2351,8 +2379,21 @@
       if (i === current && !immediate) return;
       animating = true;
       current = i;
-      pages.style.transition = immediate ? 'none' : 'transform 1s cubic-bezier(.77,0,.18,1)';
-      pages.style.transform = 'translateX(' + (-i * 100) + 'vw)';
+
+      document.querySelectorAll('.page').forEach(function (p) {
+        var pi = parseInt(p.getAttribute('data-i'), 10);
+        if (pi < i) {
+          p.classList.add('left');
+        } else {
+          p.classList.remove('left');
+        }
+        if (immediate) {
+          p.style.transition = 'none';
+          void p.offsetWidth;
+          p.style.transition = '';
+        }
+      });
+
       // 页间过渡序号（简洁大气）
       if (!immediate) {
         var tn = document.getElementById('transNum');
@@ -2436,14 +2477,24 @@
       refreshNav();
     };
 
-    /*================= Markdown 解析器（轻量） =================*/
+    /* Markdown 解析器*/
     function escapeHtml(s) {
       return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
+
     function renderInline(text) {
-      // 行内代码
-      text = text.replace(/`([^`]+)`/g, function (_, c) { return '<code>' + escapeHtml(c) + '</code>'; });
-      // 图片
+      // 行内代码（最先处理并保护，避免内部被解析）
+      var codeSpans = [];
+      text = text.replace(/`([^`]+)`/g, function (_, c) {
+        codeSpans.push('<code>' + escapeHtml(c) + '</code>');
+        return '\x00' + (codeSpans.length - 1) + '\x00';
+      });
+
+      // 自动链接 <url> 和 <email>
+      text = text.replace(/<([a-z][a-z0-9+.-]*:[^>]+)>/gi, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+      text = text.replace(/<([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})>/gi, '<a href="mailto:$1">$1</a>');
+
+      // 图片（必须在链接之前）
       text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1"/>');
       // 链接
       text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
@@ -2451,78 +2502,233 @@
       text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
       // 斜体
       text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      // 删除线
+      text = text.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+      // 高亮
+      text = text.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+      // 下标
+      text = text.replace(/~([^~]+)~/g, '<sub>$1</sub>');
+      // 上标
+      text = text.replace(/\^([^\^]+)\^/g, '<sup>$1</sup>');
+
+      // 恢复行内代码
+      text = text.replace(/\x00(\d+)\x00/g, function (_, i) { return codeSpans[+i]; });
       return text;
     }
+
     function mdToHtml(md) {
       var lines = md.split(/\r?\n/);
       var html = '';
       var inCode = false, codeBuf = [], codeLang = '';
-      var inList = false, listType = '';
+      var listStack = []; // 支持嵌套列表 [{type:'ul', indent:0}, ...]
       var i = 0;
-      function closeList() { if (inList) { html += (listType === 'ul' ? '</ul>' : '</ol>'); inList = false; } }
+
+      function closeLists(toIndent) {
+        while (listStack.length > 0 && listStack[listStack.length - 1].indent >= toIndent) {
+          var lst = listStack.pop();
+          html += (lst.type === 'ul' ? '</ul>' : '</ol>') + '\n';
+        }
+      }
+      function closeAllLists() {
+        while (listStack.length > 0) {
+          var lst = listStack.pop();
+          html += (lst.type === 'ul' ? '</ul>' : '</ol>') + '\n';
+        }
+      }
+      function currentListIndent() {
+        return listStack.length ? listStack[listStack.length - 1].indent : -1;
+      }
+
       while (i < lines.length) {
         var line = lines[i];
         var trimmed = line.trim();
+
         // 代码块
         if (/^```/.test(trimmed)) {
-          if (inCode) { html += '<pre><code>' + escapeHtml(codeBuf.join('\n')) + '</code></pre>'; codeBuf = []; inCode = false; }
-          else { inCode = true; codeLang = trimmed.slice(3).trim(); }
+          closeAllLists();
+          if (inCode) {
+            html += '<pre><code' + (codeLang ? ' class="language-' + escapeHtml(codeLang) + '"' : '') + '>' +
+              escapeHtml(codeBuf.join('\n')) + '</code></pre>\n';
+            codeBuf = []; inCode = false; codeLang = '';
+          } else {
+            inCode = true; codeLang = trimmed.slice(3).trim();
+          }
           i++; continue;
         }
         if (inCode) { codeBuf.push(line); i++; continue; }
+
         // 空行
-        if (trimmed === '') { closeList(); i++; continue; }
-        // 标题
-        var h = trimmed.match(/^(#{1,4})\s+(.*)/);
-        if (h) { closeList(); var lv = h[1].length; html += '<h' + lv + '>' + renderInline(h[2]) + '</h' + lv + '>'; i++; continue; }
-        // 分隔线
-        if (/^(-{3,}|\*{3,})$/.test(trimmed)) { closeList(); html += '<hr/>'; i++; continue; }
-        // 引用
-        if (/^>/.test(trimmed)) {
-          closeList();
-          var quote = [];
-          while (i < lines.length && /^>/.test(lines[i].trim())) { quote.push(lines[i].trim().replace(/^>\s?/, '')); i++; }
-          html += '<blockquote>' + renderInline(quote.join(' ')) + '</blockquote>';
-          continue;
-        }
-        // 无序列表
-        if (/^[-*+]\s+/.test(trimmed)) {
-          if (!inList || listType !== 'ul') { closeList(); html += '<ul>'; inList = true; listType = 'ul'; }
-          html += '<li>' + renderInline(trimmed.replace(/^[-*+]\s+/, '')) + '</li>';
-          i++; continue;
-        }
-        // 有序列表
-        if (/^\d+\.\s+/.test(trimmed)) {
-          if (!inList || listType !== 'ol') { closeList(); html += '<ol>'; inList = true; listType = 'ol'; }
-          html += '<li>' + renderInline(trimmed.replace(/^\d+\.\s+/, '')) + '</li>';
-          i++; continue;
-        }
-        // 表格
-        if (/^\|/.test(trimmed)) {
-          closeList();
-          var rows = [];
-          while (i < lines.length && /^\|/.test(lines[i].trim())) { rows.push(lines[i].trim()); i++; }
-          var cells = function (r) { return r.replace(/^\||\|$/g, '').split('|').map(function (c) { return c.trim(); }); };
-          var header = cells(rows[0]);
-          html += '<table><thead><tr>' + header.map(function (c) { return '<th>' + renderInline(c) + '</th>'; }).join('') + '</tr></thead><tbody>';
-          for (var r = 2; r < rows.length; r++) {
-            var cs = cells(rows[r]);
-            html += '<tr>' + cs.map(function (c) { return '<td>' + renderInline(c) + '</td>'; }).join('') + '</tr>';
+        if (trimmed === '') { closeAllLists(); i++; continue; }
+
+        // Setext 风格标题
+        if (i + 1 < lines.length && !/^\s*$/.test(trimmed) &&
+          !/^(#{1,6}\s|>|\s*[-*+]|\s*\d+\.|```)/.test(trimmed)) {
+          var nextTrim = lines[i + 1].trim();
+          if (/^=+$/.test(nextTrim)) {
+            closeAllLists();
+            html += '<h1>' + renderInline(trimmed) + '</h1>\n';
+            i += 2; continue;
           }
-          html += '</tbody></table>';
+          if (/^-+$/.test(nextTrim)) {
+            closeAllLists();
+            html += '<h2>' + renderInline(trimmed) + '</h2>\n';
+            i += 2; continue;
+          }
+        }
+
+        // ATX 标题
+        var h = trimmed.match(/^(#{1,6})\s+(.*)/);
+        if (h) {
+          closeAllLists();
+          var lv = h[1].length;
+          html += '<h' + lv + '>' + renderInline(h[2]) + '</h' + lv + '>\n';
+          i++; continue;
+        }
+
+        // 分隔线
+        if (/^(-{3,}|\*{3,}|_{3,})$/.test(trimmed)) {
+          closeAllLists();
+          html += '<hr/>\n';
+          i++; continue;
+        }
+
+        // 引用块（支持嵌套解析）
+        if (/^>/.test(trimmed)) {
+          closeAllLists();
+          var quoteLines = [];
+          while (i < lines.length && /^>/.test(lines[i].trim())) {
+            quoteLines.push(lines[i].trim().replace(/^>\s?/, ''));
+            i++;
+          }
+          html += '<blockquote>\n' + mdToHtml(quoteLines.join('\n')) + '</blockquote>\n';
           continue;
         }
-        // 段落
-        closeList();
-        html += '<p>' + renderInline(trimmed) + '</p>';
+
+        // 列表（无序 / 有序 / 任务列表 / 嵌套）
+        var listMatch = trimmed.match(/^(\s*)([-*+]|\d+\.)\s+(.*)/);
+        if (listMatch) {
+          var indent = listMatch[1].length;
+          var marker = listMatch[2];
+          var content = listMatch[3];
+          var isTask = /\[([ xX])\]\s+(.*)/.test(content);
+          var taskCheck = '';
+          if (isTask) {
+            var tm = content.match(/\[([ xX])\]\s+(.*)/);
+            var checked = tm[1].toLowerCase() === 'x';
+            taskCheck = '<input type="checkbox" disabled' + (checked ? ' checked' : '') + '/> ';
+            content = tm[2];
+          }
+
+          var type = /^\d+\./.test(marker) ? 'ol' : 'ul';
+
+          // 嵌套层级处理
+          if (listStack.length === 0 || indent > currentListIndent()) {
+            html += (type === 'ul' ? '<ul>' : '<ol>') + '\n';
+            listStack.push({ type: type, indent: indent });
+          } else if (indent < currentListIndent()) {
+            closeLists(indent);
+            if (listStack.length === 0 || listStack[listStack.length - 1].type !== type) {
+              html += (type === 'ul' ? '<ul>' : '<ol>') + '\n';
+              listStack.push({ type: type, indent: indent });
+            }
+          } else if (listStack[listStack.length - 1].type !== type) {
+            closeLists(indent);
+            html += (type === 'ul' ? '<ul>' : '<ol>') + '\n';
+            listStack.push({ type: type, indent: indent });
+          }
+
+          // 收集列表项的多行内容
+          var itemLines = [content];
+          i++;
+          while (i < lines.length) {
+            var nextLine = lines[i];
+            var nextTrim = nextLine.trim();
+            if (nextTrim === '') break;
+            var nextIndent = nextLine.match(/^(\s*)/)[1].length;
+            var nextList = nextTrim.match(/^(\s*)([-*+]|\d+\.)\s+/);
+            if (nextList && nextList[1].length <= indent) break;
+            if (nextIndent > indent || (!nextList && nextTrim !== '')) {
+              itemLines.push(nextLine.replace(new RegExp('^ {' + (indent + 2) + '}'), ''));
+              i++;
+            } else {
+              break;
+            }
+          }
+
+          var itemContent = itemLines.join('\n');
+          if (/^(#{1,6}\s|>|```|\s*[-*+]|\s*\d+\.|\|)/m.test(itemContent)) {
+            itemContent = mdToHtml(itemContent);
+          } else {
+            itemContent = renderInline(itemContent);
+          }
+          html += '<li>' + taskCheck + itemContent + '</li>\n';
+          continue;
+        }
+
+        // 表格（支持对齐语法）
+        if (/^\|/.test(trimmed)) {
+          closeAllLists();
+          var rows = [];
+          while (i < lines.length && /^\|/.test(lines[i].trim())) {
+            rows.push(lines[i].trim()); i++;
+          }
+          if (rows.length >= 2) {
+            var cells = function (r) {
+              return r.replace(/^\||\|$/g, '').split('|').map(function (c) { return c.trim(); });
+            };
+            var header = cells(rows[0]);
+            var alignRow = cells(rows[1]);
+            var aligns = alignRow.map(function (c) {
+              c = c.replace(/\s/g, '');
+              if (/^:.*:$/.test(c)) return 'center';
+              if (/^:.*$/.test(c)) return 'left';
+              if (/^.*:$/.test(c)) return 'right';
+              return '';
+            });
+            html += '<table><thead><tr>' +
+              header.map(function (c, idx) {
+                var a = aligns[idx] ? ' style="text-align:' + aligns[idx] + '"' : '';
+                return '<th' + a + '>' + renderInline(c) + '</th>';
+              }).join('') +
+              '</tr></thead><tbody>';
+            for (var r = 2; r < rows.length; r++) {
+              var cs = cells(rows[r]);
+              html += '<tr>' + cs.map(function (c, idx) {
+                var a = aligns[idx] ? ' style="text-align:' + aligns[idx] + '"' : '';
+                return '<td' + a + '>' + renderInline(c) + '</td>';
+              }).join('') + '</tr>';
+            }
+            html += '</tbody></table>\n';
+          }
+          continue;
+        }
+
+        // 段落（支持硬换行行尾两个空格）
+        closeAllLists();
+        var paraLines = [trimmed];
         i++;
+        while (i < lines.length && lines[i].trim() !== '' &&
+          !/^(#{1,6}\s|>|\s*[-*+]|\s*\d+\.|```|\|)/.test(lines[i].trim())) {
+          var pl = lines[i];
+          var prev = paraLines[paraLines.length - 1];
+          if (/  $/.test(prev)) {
+            paraLines[paraLines.length - 1] = prev.replace(/  $/, '') + '<br/>';
+          }
+          paraLines.push(pl.trim());
+          i++;
+        }
+        html += '<p>' + renderInline(paraLines.join(' ')) + '</p>\n';
       }
-      closeList();
-      if (inCode) { html += '<pre><code>' + escapeHtml(codeBuf.join('\n')) + '</code></pre>'; }
-      return html;
+
+      closeAllLists();
+      if (inCode) {
+        html += '<pre><code' + (codeLang ? ' class="language-' + escapeHtml(codeLang) + '"' : '') + '>' +
+          escapeHtml(codeBuf.join('\n')) + '</code></pre>\n';
+      }
+      return html.trim();
     }
 
-    /*================= 加载文章 =================*/
+    /* 加载文章 */
     var posts = [];
     var activeCat = 'all';
     var pageSize = 3;

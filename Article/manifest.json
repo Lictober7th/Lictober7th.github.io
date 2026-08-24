@@ -3,29 +3,16 @@
   "subtitle": "Lictober7th://LOG",
   "posts": [
     {
-      "file": "me.md",
-      "title": "自我介绍",
-      "date": "2026-08-23 00:23:50",
-      "cat": "other",
-      "catLabel": "其他",
-      "tags": [
-        "自我介绍",
-        "GitHub"
-      ],
-      "excerpt": "只是一个自我介绍",
-      "featured": false
-    },
-    {
-      "file": "日志生成器使用文档.md",
-      "title": "日志生成器",
-      "date": "2026-08-23 00:45:13",
+      "file": "MarkDown.md",
+      "title": "MarkDown测试文档",
+      "date": "2026-08-24 12:30:09",
       "cat": "dev",
       "catLabel": "开发",
       "tags": [
-        "Python",
-        "JSON"
+        "测试",
+        "MarkDown"
       ],
-      "excerpt": "日志生成器是一个基于 Python Tkinter 开发的图形界面工具，专门用于管理和生成符合 Lictober7th 博客系统格式的日志数据。",
+      "excerpt": "MarkDown测试文档",
       "featured": false
     },
     {
@@ -39,6 +26,32 @@
         "Java"
       ],
       "excerpt": "一个将 Monster Siren Records 的音乐和网页内容带入游戏的 Minecraft 模组",
+      "featured": false
+    },
+    {
+      "file": "JsonEditer.md",
+      "title": "JSON 编辑器",
+      "date": "2026-08-23 00:45:13",
+      "cat": "dev",
+      "catLabel": "开发",
+      "tags": [
+        "Python",
+        "JSON"
+      ],
+      "excerpt": "JSON 编辑器是一个基于 Python Tkinter 开发的图形界面工具，专门用于管理和生成符合 Lictober7th 博客系统格式的 JSON 数据。",
+      "featured": false
+    },
+    {
+      "file": "me.md",
+      "title": "自我介绍",
+      "date": "2026-08-23 00:23:50",
+      "cat": "other",
+      "catLabel": "其他",
+      "tags": [
+        "自我介绍",
+        "GitHub"
+      ],
+      "excerpt": "只是一个自我介绍",
       "featured": true
     }
   ]
