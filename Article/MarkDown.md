@@ -111,7 +111,7 @@ def hello_world():
 可以指定对齐方式, 如Item列左对齐, Value列右对齐, Qty列居中对齐
 
 | Item     | Value | Qty   |
-| :------- | ----: | :---: |
+| :-------| ----: | :---: |
 | Computer | $1600 |  5    |
 | Phone    | $12   |  12   |
 | Pipe     | $1    |  234  |
