@@ -1,10 +1,10 @@
 //以下注释由GLM5.1生成，非人工编写，可能存在不准确或不完整的情况，请谨慎参考。
-//全局状态
+//====================全局状态====================
 var current = 0;
 var total = 4;
 var animating = false;
 
-/* LOADING */
+//====================LOADING====================
 (function () {
     var pct = document.querySelector('#loader .pct');
     var n = 0;
@@ -35,7 +35,7 @@ var animating = false;
     });
 })();
 
-//背景音乐
+//====================背景音乐====================
 (function () {
     var audio = new Audio('./file/audio/background-music.mp3');
     audio.loop = true;
@@ -97,13 +97,13 @@ var animating = false;
     audio.addEventListener('pause', function () { setState(false); });
 })();
 
-//整屏滚动
+//====================整屏滚动====================
 var pages = document.getElementById('pages');
 var dots = document.querySelectorAll('#dots .dot');
 var pageind = document.getElementById('curPage');
 var nav = document.getElementById('nav');
 
-//多方向错落进入动画
+//====================多方向错落进入动画====================
 var staggerDirs = ['sl', 'su', 'sr', 'ss', 'sd'];
 
 //为带有'stagger'类的元素添加动画效果，每个元素有不同的动画方向和延迟时间
@@ -126,6 +126,7 @@ function animateStagger(sec) {
     });
 }
 
+//====================页面导航=========
 //页面导航函数，用于控制页面切换和动画效果
 //@param {number} i - 要跳转到的页面索引
 //@param {boolean} immediate - 是否立即切换，不使用过渡动画
@@ -182,6 +183,7 @@ setTimeout(function () {
     animateStagger(document.querySelector('.page[data-i="0"]'));
 }, 600);
 
+//====================页面交互映射=========
 //滚轮（纵向滚轮 + 触控板横向滑动都映射为翻页）
 var wheelLock = false;
 window.addEventListener('wheel', function (e) {
@@ -223,6 +225,7 @@ window.addEventListener('keydown', function (e) {
     else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); goTo(current - 1); }
 });
 
+//====================导航点/按钮/菜单项跳转====================
 //导航点/按钮/菜单项跳转
 document.querySelectorAll('[data-goto]').forEach(function (el) {
     el.addEventListener('click', function (e) {
@@ -240,7 +243,7 @@ goTo = function (i, immediate) {
     refreshNav();
 };
 
-//Markdown 解析器
+//====================Markdown解析器====================
 //对HTML特殊字符进行转义，防止XSS攻击
 //@param {string} s - 需要转义的原始字符串
 //@returns {string} 转义后的安全字符串
@@ -515,7 +518,7 @@ function mdToHtml(md) {
     return html.trim();
 }
 
-/* 加载文章 */
+//====================加载文章====================
 var posts = [];
 var activeCat = 'all';
 var pageSize = 3;
@@ -647,4 +650,36 @@ document.getElementById('pgNext').addEventListener('click', function () {
             '<div class="meta"><span class="cat">提示</span></div><h3>无法读取文章数据</h3>' +
             '<p class="ex">请通过 HTTP 服务器打开本页面（如 VS Code Live Server 或 python -m http.server）。</p></div>';
     });
+})();
+
+//====================动态光标====================
+(function () {
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    let dotX = mouseX, dotY = mouseY;
+    let ringX = mouseX, ringY = mouseY;
+
+    document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    function animate() {
+        // 圆点：即时跟随（lerp 0.85，几乎无延迟）
+        dotX += (mouseX - dotX) * 0.85;
+        dotY += (mouseY - dotY) * 0.85;
+        dot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+
+        // 圆环：延迟跟随（lerp 0.08 ≈ 0.3s 延迟 @ 60fps）
+        ringX += (mouseX - ringX) * 0.08;
+        ringY += (mouseY - ringY) * 0.08;
+        ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+
+        requestAnimationFrame(animate);
+    }
+    animate();
 })();

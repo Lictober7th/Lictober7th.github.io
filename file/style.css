@@ -19,6 +19,7 @@ html[data-theme="dark"] {
     --nav-bg: rgba(0, 0, 0, .82);
     --card-glow: rgba(0, 217, 197, .08);
     --stroke-title: var(--cyan);
+    --cursor: #ffffff;
 }
 
 html[data-theme="light"] {
@@ -41,6 +42,7 @@ html[data-theme="light"] {
     --nav-bg: rgba(236, 233, 226, .85);
     --card-glow: rgba(0, 168, 150, .06);
     --stroke-title: #00a896;
+    --cursor: #000000;
 }
 
 * {
@@ -63,6 +65,7 @@ body {
     height: 100vh;
     line-height: 1.7;
     transition: background .5s ease, color .5s ease;
+    cursor: none;
 }
 
 ::selection {
@@ -85,7 +88,7 @@ img {
     height: 0;
 }
 
-/*全局点阵纹理*/
+/*====================全局点阵纹理====================*/
 body::before {
     content: "";
     position: fixed;
@@ -102,7 +105,7 @@ body::before {
     opacity: .5;
 }
 
-/*LOADING*/
+/*====================LOADING====================*/
 #loader {
     position: fixed;
     inset: 0;
@@ -172,7 +175,7 @@ body::before {
     color: var(--cyan);
 }
 
-/*顶部导航*/
+/*====================顶部导航====================*/
 header#nav {
     position: fixed;
     top: 0;
@@ -280,7 +283,7 @@ header#nav.scrolled {
     stroke-width: 1.6;
 }
 
-/*音乐播放动画*/
+/*====================音乐播放动画====================*/
 .icon-btn.playing::after {
     content: "";
     position: absolute;
@@ -347,7 +350,7 @@ header#nav.scrolled {
     }
 }
 
-/*顶栏横向导航菜单*/
+/*====================顶栏横向导航菜单====================*/
 nav.menu {
     display: flex;
     align-items: center;
@@ -405,7 +408,7 @@ nav.menu a.active::after {
     width: 100%;
 }
 
-/*全屏滚动容器*/
+/*====================全屏滚动容器====================*/
 #pages {
     position: fixed;
     inset: 0;
@@ -433,7 +436,7 @@ nav.menu a.active::after {
     overflow-x: hidden;
 }
 
-/*页面背景层*/
+/*====================页面背景层====================*/
 .pg-bg {
     position: absolute;
     inset: 0;
@@ -441,6 +444,7 @@ nav.menu a.active::after {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-color: var(--bg);
 }
 
 .pg-bg::after {
@@ -500,7 +504,7 @@ nav.menu a.active::after {
     transform: translateX(-100vw);
 }
 
-/*首页*/
+/*====================首页====================*/
 .hero-inner {
     width: 100%;
     max-width: 1200px;
@@ -1146,7 +1150,7 @@ html[data-theme="light"] .hero-title {
     color: var(--cyan);
 }
 
-/*文章页*/
+/*====================文章页====================*/
 .tabs {
     display: flex;
     gap: 0;
@@ -1365,7 +1369,7 @@ html[data-theme="light"] .hero-title {
     font-size: 24px;
 }
 
-/*关于页*/
+/*====================关于页====================*/
 .profile {
     display: flex;
     gap: clamp(28px, 5vw, 72px);
@@ -1501,7 +1505,7 @@ html[data-theme="light"] .hero-title {
     margin-top: 8px;
 }
 
-/*更多/链接页*/
+/*====================更多/链接页====================*/
 .links {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1552,7 +1556,7 @@ html[data-theme="light"] .hero-title {
     margin-top: auto;
 }
 
-/*文章阅读覆盖层*/
+/*====================文章阅读覆盖层====================*/
 #reader {
     position: fixed;
     inset: 0;
@@ -1757,7 +1761,7 @@ html[data-theme="light"] .hero-title {
     font-weight: 600;
 }
 
-/*进入动画（多方向错落）*/
+/*====================进入动画（多方向错落）====================*/
 .stagger {
     opacity: 0;
     transition: opacity .85s cubic-bezier(.22, 1, .36, 1), transform .85s cubic-bezier(.22, 1, .36, 1);
@@ -1788,7 +1792,7 @@ html[data-theme="light"] .hero-title {
     transform: none;
 }
 
-/*文章分页*/
+/*====================文章分页====================*/
 .pager {
     display: flex;
     align-items: center;
@@ -1836,7 +1840,7 @@ html[data-theme="light"] .hero-title {
     font-size: 15px;
 }
 
-/*页间过渡序号（简洁大气）*/
+/*====================页间过渡序号（简洁大气）====================*/
 #transition {
     position: fixed;
     inset: 0;
@@ -1988,4 +1992,37 @@ html[data-theme="light"] .hero-title {
         width: 34px;
         height: 34px;
     }
+}
+
+/*====================动态光标====================*/
+/* 中心圆点 — 即时跟随 */
+.cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background: var(--cursor);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--cursor), 0 0 20px var(--cursor);
+    will-change: transform;
+}
+
+/* 外圈圆环 — 0.3s 延迟跟随 */
+.cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--cursor);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px var(--cursor);
+    will-change: transform;
 }

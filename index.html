@@ -2,41 +2,45 @@
 <html lang="zh-cn" data-theme="dark">
 
 <head>
-  <!--META-->
+  <!--==========META==========-->
   <meta charset="utf-8" />
   <meta name="viewport"
     content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
   <meta name="theme-color" content="#000000" />
   <meta name="color-scheme" content="dark" />
-  <!--搜索引擎关键字-->
+  <!--==========搜索引擎关键字==========-->
   <meta name="description" content="Lictober7th的个人博客" />
-  <!--网站标题-->
+  <!--==========网站标题==========-->
   <title>Lictober7th://LOG</title>
-  <!--图标-->
+  <!--==========图标==========-->
   <link rel="icon" type="image/png" href="./file/favicon/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="./file/favicon/favicon.svg" />
   <link rel="shortcut icon" href="./file/favicon/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="./file/favicon/apple-touch-icon.png" />
   <link rel="manifest" href="./file/favicon/site.webmanifest" />
-  <!--字体-->
+  <!--==========字体==========-->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap"
     rel="stylesheet" />
-  <!--CSS-->
+  <!--==========CSS==========-->
   <link rel="stylesheet" href="./file/style.css" />
 </head>
 
 <body>
-  <!--LOADING-->
+  <!--==========LOADING==========-->
   <div id="loader">
     <div class="mark">Lictober7th <span style="color:var(--cyan)">//</span> LOG</div>
     <div class="bar"><i></i></div>
     <div class="pct">0<em>%</em></div>
   </div>
 
-  <!--顶部导航-->
+  <!--==========动态光标==========-->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!--==========顶部导航==========-->
   <header id="nav">
     <a href="javascript:void(0)" class="brand" data-goto="0">
       <span class="logo"></span>
@@ -75,7 +79,7 @@
     </div>
   </header>
 
-  <!--分页导航点-->
+  <!--==========分页导航点==========-->
   <div id="dots">
     <div class="dot active" data-goto="0"><span class="tip">INDEX</span></div>
     <div class="dot" data-goto="1"><span class="tip">POSTS</span></div>
@@ -83,22 +87,22 @@
     <div class="dot" data-goto="3"><span class="tip">MORE</span></div>
   </div>
 
-  <!--页码指示-->
+  <!--==========页码指示==========-->
   <div id="pageind">
     <span class="scroll">Scroll</span>
     <span class="num">01 //<b id="curPage">01</b> //04</span>
     <span class="line"><i></i></span>
   </div>
 
-  <!--页间过渡序号-->
+  <!--==========页间过渡序号==========-->
   <div id="transition"><span class="t-num" id="transNum">01</span></div>
 
-  <!--页面容器-->
+  <!--==========页面容器==========-->
   <div id="pages">
 
-    <!--0 首页-->
+    <!--==========0 首页==========-->
     <section class="page" id="hero" data-i="0">
-      <div class="pg-bg" style="background-image:url('./file/image/bg-hero.png');background-color: var(--bg);"></div>
+      <div class="pg-bg" style="background-image:url('./file/image/bg-hero.png')"></div>
       <div class="corner-url">HTTPS://Lictober7th.LOG/</div>
       <div class="hero-inner">
         <div class="hero-kicker stagger">Lictober Labs //PERSONAL ARCHIVE</div>
@@ -116,9 +120,9 @@
       </div>
     </section>
 
-    <!--1 文章-->
+    <!--==========1 文章==========-->
     <section class="page" id="posts" data-i="1">
-      <div class="pg-bg" style="background-image:url('./file/image/bg-posts.png');background-color: var(--bg);"></div>
+      <div class="pg-bg" style="background-image:url('./file/image/bg-posts.png')"></div>
       <div class="sec-wrap">
         <div class="sec-head">
           <div>
@@ -143,9 +147,9 @@
       </div>
     </section>
 
-    <!--2 关于-->
+    <!--==========2 关于==========-->
     <section class="page" id="about" data-i="2">
-      <div class="pg-bg" style="background-image:url('./file/image/bg-about.png');background-color: var(--bg);"></div>
+      <div class="pg-bg" style="background-image:url('./file/image/bg-about.png')"></div>
       <div class="sec-wrap">
         <div class="sec-head">
           <div>
@@ -192,9 +196,9 @@
       </div>
     </section>
 
-    <!--3 更多/链接-->
+    <!--==========3 更多/链接==========-->
     <section class="page" id="more" data-i="3">
-      <div class="pg-bg" style="background-image:url('./file/image/bg-more.png');background-color: var(--bg);"></div>
+      <div class="pg-bg" style="background-image:url('./file/image/bg-more.png')"></div>
       <div class="sec-wrap">
         <div class="sec-head">
           <div>
@@ -225,20 +229,19 @@
         </div>
       </div>
     </section>
-  </div>
 
-  <!--文章阅读层-->
-  <div id="reader">
-    <div class="reader-inner">
-      <span class="reader-back" id="readerBack"><span class="arr">←</span> GO BACK</span>
-      <div class="reader-meta" id="readerMeta"></div>
-      <h1 class="reader-title" id="readerTitle"></h1>
-      <div class="reader-body" id="readerBody"></div>
+    <!--==========文章阅读层==========-->
+    <div id="reader">
+      <div class="reader-inner">
+        <span class="reader-back" id="readerBack"><span class="arr">←</span> GO BACK</span>
+        <div class="reader-meta" id="readerMeta"></div>
+        <h1 class="reader-title" id="readerTitle"></h1>
+        <div class="reader-body" id="readerBody"></div>
+      </div>
     </div>
-  </div>
-
-  <!--JavaScript-->
-  <script src="./file/script.js"></script>
+    
+    <!--==========JavaScript==========-->
+    <script src="./file/script.js"></script>
 </body>
 
 </html>
