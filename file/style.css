@@ -210,7 +210,7 @@ header#nav.scrolled {
     /*保留尺寸*/
     height: 30px;
     /*保留尺寸*/
-    background: url(./file/image/icon.svg) no-repeat center/contain;
+    background: url(./image/icon.svg) no-repeat center/contain;
     border: none;
     /*去掉外边框*/
     clip-path: none;
@@ -424,6 +424,7 @@ nav.menu a.active::after {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: var(--bg);
 }
 
 /*非首页：内容顶部对齐，避开顶栏，内容过多可滚动*/
@@ -444,7 +445,6 @@ nav.menu a.active::after {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: var(--bg);
 }
 
 .pg-bg::after {
