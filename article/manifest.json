@@ -13,7 +13,7 @@
         "JavaScript"
       ],
       "excerpt": "这是一个基于 Canvas 和物理模拟的 GIF 粒子展示工具。",
-      "featured": true
+      "featured": false
     },
     {
       "file": "MarkDown.md",
