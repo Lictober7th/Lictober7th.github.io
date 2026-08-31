@@ -641,7 +641,7 @@ document.getElementById('pgNext').addEventListener('click', function () {
 
 //加载文章数据
 (function initPosts() {
-    fetch('Article/manifest.json').then(function (r) { return r.json(); }).then(function (data) {
+    fetch('article/manifest.json').then(function (r) { return r.json(); }).then(function (data) {
         posts = data.posts || [];
         renderCards();
     }).catch(function () {
