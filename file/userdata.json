@@ -1,0 +1,12 @@
+{
+    "users": [
+        {
+            "username": "Lictober7th",
+            "key": "admin"
+        },
+        {
+            "username": "user",
+            "key": "000000"
+        }
+    ]
+}

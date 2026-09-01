@@ -169,13 +169,13 @@
               <h3>Lictober7th</h3><span class="cn">「Hansir」</span><span class="badge">ONLINE</span>
             </div>
             <p class="bio">
-              一个「自由」开发者。目前学习<b>Python</b>和<b>Web</b>开发，晚上在泰拉大陆肝理智。相信<b>代码</b>与<b>源石技艺</b>一样，都是对世界运行规则的一种解读。
+              >>一个「自由」开发者。目前学习<b>Python</b>和<b>Web</b>开发，晚上在泰拉大陆肝理智。相信<b>代码</b>与<b>源石技艺</b>一样，都是对世界运行规则的一种解读。
             </p>
             <p class="bio">
-              >My motto:<b>"Do what you can, with what you have, where you are."</b>
+              >>My motto:<b>"Do what you can, with what you have, where you are."</b>
             </p>
             <p class="bio">
-              >My favorite digest:<b>"阳光透过天窗洒下来，照亮了那支山茶花。花瓣红艳，花蕊金黄。"</b>
+              >>My favorite digest:<b>"阳光透过天窗洒下来，照亮了那支山茶花。花瓣红艳，花蕊金黄。"</b>
             </p>
             <div class="stats">
               <div class="stat">
@@ -229,12 +229,15 @@
           <a class="link stagger" href="https://ak.hypergryph.com/" target="_blank" rel="noopener"><span
               class="en">ARKNIGHTS</span><span class="cn">明日方舟官网</span><span class="desc">本博客风格的设计来源。</span><span
               class="url">AK.HYPERGRYPH.COM</span></a>
-          <a class="link stagger" href="https://prts.wiki/" target="_blank" rel="noopener"><span class="en">PRTS
-              WIKI</span><span class="cn">PRTS Wiki</span><span class="desc">明日方舟民间中文维基。</span><span
+          <a class="link stagger" href="https://prts.wiki/" target="_blank" rel="noopener"><span
+              class="en">PRTSWIKI</span><span class="cn">PRTS Wiki</span><span class="desc">明日方舟民间中文维基。</span><span
               class="url">PRTS.WIKI</span></a>
+          <a class="link stagger" onclick="openTerminal()"><span class="en">命令提示符</span><span
+              class="cn">⌘打开命令提示符</span><span class="desc">打开一个神秘终端。</span><span class="url">Terminal</span></a>
         </div>
       </div>
     </section>
+  </div>
 
     <!--==========文章阅读层==========-->
     <div id="reader">
@@ -245,7 +248,35 @@
         <div class="reader-body" id="readerBody"></div>
       </div>
     </div>
-    
+
+    <!--==========终端==========-->
+    <div id="terminalWindow">
+      <div class="title-bar" id="titleBar">
+        <span class="title-text">命令提示符</span>
+        <div class="window-controls">
+          <button id="minimizeButton" title="最小化" onclick="minimizeTerminal()">—</button>
+          <button id="maximizeButton" title="全屏/还原" onclick="toggleFullscreen()">▢</button>
+          <button class="close-button" title="关闭" onclick="closeTerminal()">✕</button>
+        </div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-output" id="terminalOutput"></div>
+        <div class="resize-corner" id="resizeCorner"></div>
+        <div class="resize-right-edge" id="resizeRightEdge"></div>
+        <div class="resize-bottom-edge" id="resizeBottomEdge"></div>
+      </div>
+    </div>
+
+    <!--==========终端任务栏==========-->
+    <div class="taskbar" id="taskbar">
+      <button class="taskbar-item" onclick="restoreFromTaskbar()"><span>⌘</span> 命令提示符</button>
+    </div>
+
+    <!--==========LOG™==========-->
+    <div id="LOGTM">
+      <canvas id="c"></canvas>
+    </div>
+
     <!--==========JavaScript==========-->
     <script src="./file/script.js"></script>
 </body>
