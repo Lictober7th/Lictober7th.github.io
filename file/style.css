@@ -49,6 +49,7 @@ html[data-theme="light"] {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    cursor: none !important;
 }
 
 html {
@@ -65,7 +66,6 @@ body {
     height: 100vh;
     line-height: 1.7;
     transition: background .5s ease, color .5s ease;
-    cursor: none;
 }
 
 ::selection {
@@ -2025,4 +2025,11 @@ html[data-theme="light"] .hero-title {
     transform: translate(-50%, -50%);
     box-shadow: 0 0 8px var(--cursor);
     will-change: transform;
+    transition: width 0.25s ease, height 0.25s ease;
+}
+
+.cursor-ring.hover {
+    width: 56px;
+    height: 56px;
+    border-width: 3px;
 }

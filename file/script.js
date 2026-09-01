@@ -654,32 +654,53 @@ document.getElementById('pgNext').addEventListener('click', function () {
 
 //====================动态光标====================
 (function () {
-    const dot = document.getElementById('cursorDot');
-    const ring = document.getElementById('cursorRing');
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
 
-    let dotX = mouseX, dotY = mouseY;
-    let ringX = mouseX, ringY = mouseY;
+  let dotX = mouseX, dotY = mouseY;
+  let ringX = mouseX, ringY = mouseY;
 
-    document.addEventListener('mousemove', e => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
+  let isHovering = false; // 新增状态
 
-    function animate() {
-        // 圆点：即时跟随（lerp 0.85，几乎无延迟）
-        dotX += (mouseX - dotX) * 0.85;
-        dotY += (mouseY - dotY) * 0.85;
-        dot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
-
-        // 圆环：延迟跟随（lerp 0.08 ≈ 0.3s 延迟 @ 60fps）
-        ringX += (mouseX - ringX) * 0.08;
-        ringY += (mouseY - ringY) * 0.08;
-        ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
-
-        requestAnimationFrame(animate);
+  // --- 悬停检测 ---
+  document.addEventListener('mouseover', (e) => {
+    const target = e.target.closest('a, button, [role="button"], input[type="submit"], .clickable');
+    if (target) {
+      isHovering = true;
+      ring.classList.add('hover');
     }
-    animate();
+  });
+
+  document.addEventListener('mouseout', (e) => {
+    const target = e.target.closest('a, button, [role="button"], input[type="submit"], .clickable');
+    if (target) {
+      isHovering = false;
+      ring.classList.remove('hover');
+    }
+  });
+
+  // --- 鼠标移动 ---
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function animate() {
+    // 圆点：即时跟随
+    dotX += (mouseX - dotX) * 0.85;
+    dotY += (mouseY - dotY) * 0.85;
+    dot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+
+    // 圆环：根据悬停状态使用不同 lerp 系数
+    const ringLerp = isHovering ? 0.25 : 0.08;   // 悬停时降低延迟
+    ringX += (mouseX - ringX) * ringLerp;
+    ringY += (mouseY - ringY) * ringLerp;
+    ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+
+    requestAnimationFrame(animate);
+  }
+  animate();
 })();
